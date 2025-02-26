@@ -1,0 +1,12 @@
+{% extends "base.html"%}
+{% block content %}
+  {% if param == "ol"%}
+    {% for i in query %}
+      <div>{{ i }}</div>
+    {% endfor %}
+  {% else %}
+    {% for i in query %}
+      <li>{{ query.index(i) + 1 }} - {{ i }}</li>
+    {% endfor %}
+  {% endif %}
+{% endblock %}
