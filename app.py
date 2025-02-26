@@ -34,6 +34,11 @@ def anwser():
               'ready': True}
     return render_template('auto_anwser.html', **params)
 
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        pass
+    return render_template('register.html')
 
 
 if __name__ == '__main__':
