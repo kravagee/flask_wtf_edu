@@ -38,7 +38,7 @@ def anwser():
 def login():
     if request.method == 'POST':
         pass
-    return render_template('register.html')
+    return render_template('register.html', form=)
 
 
 if __name__ == '__main__':
