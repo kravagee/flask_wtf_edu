@@ -1,8 +1,17 @@
-global_init(input())
+from data import db_session, jobs
+from data.db_session import global_init
 
-session = create_session()
+global_init('db/mars_explorer.db')
 
-for jobs in session.query(Jobs).filter(Jobs.work_size < 20, Jobs.is_finished == 0).all():
-    print(jobs)
+session = db_session.create_session()
 
+job = jobs.Jobs()
+
+job.teamleader = 1
+job.job = 'deployment of residential modules 1 and 2'
+job.work_size = 15
+job.collaborators = '2, 3'
+
+session.add(job)
+session.commit()
 session.close()
