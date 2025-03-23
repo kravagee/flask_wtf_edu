@@ -56,6 +56,8 @@ def register():
         db_sess.add(new_user)
         db_sess.commit()
         db_sess.close()
+        login_user(new_user)
+        return redirect(url_for('prof_list', param='ul'))
 
     return render_template('register.html', title='Регистрация', form=form)
 
