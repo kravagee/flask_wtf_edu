@@ -1,7 +1,9 @@
 from flask import Flask, request, render_template, url_for, make_response, jsonify, redirect
 
 from data import jobs_api, db_session
+from data.jobs import Jobs
 from data.users import User
+from forms.job import AddJobForm
 from forms.user import LoginForm
 
 app = Flask(__name__)
@@ -20,11 +22,9 @@ def training(prof):
 
 @app.route('/list_prof/<param>', methods=['GET'])
 def prof_list(param):
-    query = ['инженер-исследователь', 'пилот', 'строитель', 'экзобиолог', 'врач',
-             'инженер по терраформированию', 'климатолог', 'специалист по радиационной защите',
-             'астрогеолог', 'гляциолог', 'инженер жизнеобеспечения', 'метеоролог', 'оператор марсохода',
-             'киберинженер', 'штурман', 'пилот дронов']
-    return render_template('profession_list.html', param=param, query=query)
+    db_sess = db_session.create_session()
+    data = db_sess.query(Jobs).all()
+    return render_template('profession_list.html', param=param, query=data)
 
 
 @app.route('/anwser', methods=['GET'])
@@ -57,6 +57,27 @@ def login():
                 return redirect(url_for('prof_list', param='ul'))
         return make_response(jsonify({'error': 'Not found'}, 404))
     return render_template('login.html', title='Авторизация', form=form)
+
+@app.route('/addjob', methods=['POST', 'GET'])
+def addjob():
+    form = AddJobForm()
+    if form.validate_on_submit():
+        new_job = Jobs()
+        if request.form['teamleader'] and request.form['job'] and request.form['work_size'] \
+            and request.form['collaborators'] and request.form['start_date'] and request.form['end_date']:
+
+            new_job.teamleader = request.form['teamleader']
+            new_job.job = request.form['job']
+            new_job.work_size = request.form['work_size']
+            new_job.collaborators = request.form['collaborators']
+            new_job.start_date = request.form['start_date']
+            new_job.end_date = request.form['end_date']
+            db_sess = db_session.create_session()
+            db_sess.add(new_job)
+            db_sess.commit()
+            db_sess.close()
+            return redirect(url_for('prof_list', param='ul'))
+
 
 
 if __name__ == '__main__':
