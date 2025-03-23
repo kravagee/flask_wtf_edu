@@ -1,11 +1,18 @@
-{% extends "base.html"%}
+{% extends "base.html" %}
+
 {% block content %}
-  <h3>Аварийный доступ</h3>
-  <form action="" method="post">
-    <input name="id" type="text" placeholder="id Астронавта">
-    <input name="password" type="password" placeholder="пароль Астронавта">
-    <input name="captain_id" type="text" placeholder="id Капитана">
-    <input name="captain_password" type="password" placeholder="пароль Капитана">
-    <button name="end" type="submit">Доступ</button>
-  </form>
+    <form action="" method="post" novalidate>
+        <div>
+            {{ form.csrf_token }}
+        </div>
+        {% for field in form if field.name != 'csrf_token' %}
+            <div>
+                {{ field.label() }}
+                {{ field() }}
+                {% for error in field.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </form>
 {% endblock %}
