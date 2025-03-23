@@ -1,6 +1,5 @@
-from django.contrib.auth.decorators import login_required
 from flask import Flask, request, render_template, url_for, make_response, jsonify, redirect
-from flask_login import LoginManager, login_user, logout_user
+from flask_login import LoginManager, login_user, logout_user, login_required
 
 from data import jobs_api, db_session
 from data.jobs import Jobs
