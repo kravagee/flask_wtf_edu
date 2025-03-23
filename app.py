@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, url_for, make_response, jsonify, redirect
 from flask_login import LoginManager, login_user, logout_user, login_required
 
-from data import jobs_api, db_session
+from data import jobs_api, db_session, users_api
 from data.jobs import Jobs
 from data.users import User
 from forms.job import AddJobForm
@@ -103,4 +103,5 @@ def addjob():
 if __name__ == '__main__':
     db_session.global_init('db/mars_explorer.db')
     app.register_blueprint(jobs_api.blueprint)
+    app.register_blueprint(users_api.blueprint)
     app.run(port=8080, host='127.0.0.1')

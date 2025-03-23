@@ -1,16 +1,4 @@
-from data import db_session
-from data.db_session import global_init
-from data.users import User
+from requests import *
 
-global_init('db/mars_explorer.db')
 
-us = User()
-us.name = '1'
-us.surname = '2'
-us.email = 'qwe@mail.ru'
-us.hashed_password = '123'
-
-db_sess = db_session.create_session()
-db_sess.add(us)
-db_sess.commit()
-db_sess.close()
+print(put('http://127.0.0.1:8080/api/users/1', json={'surname': 'eqr'}))
