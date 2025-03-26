@@ -63,5 +63,30 @@ def create_user():
 def edit_user(user_id):
     if not request.json:
         return make_response(jsonify({'error': 'Empty request'}, 400))
-    print(request.json)
-    db_session.create_session()
+    if not all(True for i in request.json if i in
+                                             ['surname', 'name', 'age', 'position', 'speciality', 'address', 'email']):
+        return make_response(jsonify({'error': 'Bad request'}, 400))
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).get(user_id)
+    if not user:
+        return make_response(jsonify({'error': 'User not found'}, 404))
+    user.surname = request.json['surname']
+    user.name = request.json['name']
+    user.age = request.json['age']
+    user.position = request.json['position']
+    user.speciality = request.json['speciality']
+    user.address = request.json['address']
+    user.email = request.json['email']
+    db_sess.commit()
+    db_sess.close()
+
+
+@blueprint.route('/api/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).get(user_id)
+    if not user:
+        return make_response(jsonify({'error': 'User not found'}, 404))
+    db_sess.delete(user)
+    db_sess.commit()
+    db_sess.close()
