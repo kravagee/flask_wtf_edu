@@ -1,7 +1,8 @@
 from flask import Flask, request, render_template, url_for, make_response, jsonify, redirect
 from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_restful import Api
 
-from data import jobs_api, db_session, users_api
+from data import jobs_api, db_session, users_api, users_resource
 from data.jobs import Jobs
 from data.users import User
 from forms.job import AddJobForm
@@ -9,6 +10,7 @@ from forms.user import LoginForm, RegisterForm
 
 app = Flask(__name__)
 login_manager = LoginManager()
+api = Api(app)
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
@@ -102,6 +104,8 @@ def addjob():
 
 if __name__ == '__main__':
     db_session.global_init('db/mars_explorer.db')
+    api.add_resource(users_resource.UsersListResource, '/api/v2/users')
+    api.add_resource(users_resource.UserResource, '/api/v2/users/<int:user_id>')
     app.register_blueprint(jobs_api.blueprint)
     app.register_blueprint(users_api.blueprint)
     app.run(port=8080, host='127.0.0.1')
