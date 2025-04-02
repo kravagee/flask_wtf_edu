@@ -33,13 +33,13 @@ class UserResource(Resource):
 
 
 parser = reqparse.RequestParser()
-parser.add_argument('surname', requried=True)
+parser.add_argument('surname', required=True)
 parser.add_argument('name', required=True)
-parser.add_argument('age', requried=True, type=int)
+parser.add_argument('age', required=True, type=int)
 parser.add_argument('position', required=True)
-parser.add_argument('speciality', requried=True)
+parser.add_argument('speciality', required=True)
 parser.add_argument('address', required=True)
-parser.add_argument('email', requried=True)
+parser.add_argument('email', required=True)
 parser.add_argument('password', required=True)
 
 
@@ -68,5 +68,4 @@ class UsersListResource(Resource):
         user.set_password(args['password'])
         session.add(user)
         session.commit()
-        session.close()
         return jsonify({'id': user.id})
